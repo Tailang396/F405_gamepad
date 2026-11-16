@@ -19,5 +19,8 @@ void app_gamepad(void *argument)
                         (unsigned int)gamepad.motion_available,
                         (int)gamepad.motion_h, (int)gamepad.motion_v);
         osDelay(10U);
+
+        bsp_gamepad_set_vibration(BSP_GAMEPAD_RUMBLE_LEFT, 0);
+
     }
 }
