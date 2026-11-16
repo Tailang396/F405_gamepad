@@ -1,11 +1,22 @@
 #include "gamepad.h"
 #include "gamepad_internal.h"
+#include "gamepad_usb.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include <string.h>
 
 /* USB Host 任务写入，应用任务读取；临界区保证跨任务复制的一致性。 */
 static gamepad_raw_data_t latest;
+
+uint8_t gamepad_send_data(const uint8_t *data, uint8_t length)
+{
+    return gamepad_usb_queue_send(data, length);
+}
+
+gamepad_tx_status_t gamepad_get_send_status(void)
+{
+    return gamepad_usb_send_status();
+}
 
 /**
  * 复制最近一次的原始数据快照，供任务读取。
