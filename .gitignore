@@ -1,0 +1,26 @@
+# CMake、CLion 和其他编译输出目录
+build/
+cmake-build-*/
+out/
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+MSAS-D2-DL-V1R00(STM32F405RGT6).pdf
+
+# 编译和链接生成的中间文件
+*.o
+*.obj
+*.d
+*.elf
+*.map
+
+# CLion 和 VS Code 本机配置
+.idea/
+.vscode/
+CMakeUserPresets.json
+
+# 系统临时文件
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
