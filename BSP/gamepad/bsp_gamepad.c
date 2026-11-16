@@ -48,11 +48,48 @@ static bsp_gamepad_data_t bsp_gamepad_unpack(const gamepad_raw_data_t *raw)
     return result;
 }
 
+void bsp_gamepad_get_raw_data(gamepad_raw_data_t *snapshot)
+{
+    gamepad_get_raw_data(snapshot);
+}
+
 bsp_gamepad_data_t bsp_gamepad_get_data(void)
 {
     gamepad_raw_data_t raw;
-    gamepad_get_raw_data(&raw);
+    bsp_gamepad_get_raw_data(&raw);
     return bsp_gamepad_unpack(&raw);
+}
+
+uint8_t bsp_gamepad_set_vibration(bsp_gamepad_rumble_side_t side, uint8_t strength)
+{
+    /* Xbox 360 兼容格式；是否支持及左右通道对应关系需实机验证。 */
+    uint8_t command[8] = {0x00U, 0x08U, 0x00U, 0x00U,
+                          0x00U, 0x00U, 0x00U, 0x00U};
+    switch (side) {
+    case BSP_GAMEPAD_RUMBLE_LEFT:
+        command[3] = strength;
+        break;
+    case BSP_GAMEPAD_RUMBLE_RIGHT:
+        command[4] = strength;
+        break;
+    case BSP_GAMEPAD_RUMBLE_BOTH:
+        command[3] = strength;
+        command[4] = strength;
+        break;
+    default:
+        return 0U;
+    }
+    return bsp_gamepad_send_data(command, sizeof(command));
+}
+
+uint8_t bsp_gamepad_send_data(const uint8_t *data, uint8_t length)
+{
+    return gamepad_send_data(data, length);
+}
+
+gamepad_tx_status_t bsp_gamepad_get_send_status(void)
+{
+    return gamepad_get_send_status();
 }
 
 
